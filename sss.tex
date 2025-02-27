@@ -24,9 +24,9 @@
 \usepackage{amsmath}
 
 \title[Fall Detection System]
-{Kết hợp các kỹ thuật xử lý dữ liệu không cân bằng và học sâu để nâng cao độ chính xác trong phát hiện té ngã}
+{Nghiên cứu về việc Tích hợp Trí tuệ Nhân tạo (AI) và Internet vạn vật (IoT) trong Hệ thống Phát hiện Té ngã theo Thời gian Thực}
 
-\subtitle{Combining Imbalanced Data Handling Techniques and Deep Learning to Enhance Accuracy in Fall Detection}
+\subtitle{Fall Detection Systems for Internet of Medical Things Based on Wearable Sensors: A Review (Zhiyuan Jiang, Mohammed A. A. Al-qaness*, Dalal AL-Alimi, Ahmed A. Ewess, Mohamed Abd Elaziz, Abdelghani Dahou, Ahmed M. Helmi)}
 
 
 \author[Nguyen Dinh Anh] % (optional, for multiple authors)
@@ -59,223 +59,92 @@
 \end{frame}
 
 
-\section{Xử lý dữ liệu không cân bằng}
-
-\begin{frame}{Vấn đề dữ liệu không cân bằng}
+\section{Giới Thiệu}
+\begin{frame}{Giới Thiệu Hệ Thống Phát Hiện Ngã}
     \begin{itemize}
-    \item Trong bài toán phát hiện ngã, dữ liệu thường bị mất cân bằng nghiêm trọng, với số lượng lớn mẫu dữ liệu thuộc về các hoạt động hàng ngày (ADL) và rất ít mẫu thuộc về các sự kiện ngã.
-    \item Điều này gây khó khăn cho các mô hình học máy, vì mô hình có xu hướng ưu tiên dự đoán các hoạt động thường ngày hơn là phát hiện ngã.
-    \item \textbf{Ví dụ}: Nếu có 10,000 mẫu dữ liệu về hoạt động hàng ngày nhưng chỉ có 500 mẫu dữ liệu về ngã, mô hình có thể bỏ sót nhiều trường hợp ngã do thiếu dữ liệu cho lớp thiểu số.
-    \end{itemize}
+    \item \textbf{Vai trò của hệ thống phát hiện ngã}: Việc tích hợp hệ thống phát hiện ngã với công nghệ Internet of Things (IoT) đã tạo ra một bước tiến lớn trong lĩnh vực chăm sóc sức khỏe và an toàn cá nhân. Những hệ thống này giúp giám sát và hỗ trợ kịp thời, đặc biệt là đối với người cao tuổi và những người có nguy cơ ngã cao \footnote{M. N. Bhuiyan et al. (2021) \doi{10.1109/JIOT.2021.3062630}}.      
+    \end{itemize}    
 \end{frame}
 
-\section{Nghiên cứu liên quan về Xử lý dữ liệu không cân bằng}
+\begin{frame}{Giới Thiệu Hệ Thống Phát Hiện Ngã}
 
-\begin{frame}{Xử lý dữ liệu không cân bằng trong phát hiện ngã}
-
-Một số nghiên cứu quan trọng liên quan đến việc giải quyết vấn đề này:
-
-\begin{itemize}
-    \item Trong nghiên cứu của Zhang et al. \cite{zhang2015imbalanced}, các tác giả đã áp dụng kỹ thuật SMOTE (Synthetic Minority Over-sampling Technique) để tạo ra các mẫu tổng hợp từ lớp thiểu số. SMOTE đã được chứng minh là cải thiện hiệu suất của mô hình bằng cách cân bằng dữ liệu giữa lớp ngã và ADL.
-    
-    \item Wang et al. \cite{wang2019dataaugmentation} đã sử dụng các kỹ thuật tăng cường dữ liệu (Data Augmentation) để giải quyết mất cân bằng dữ liệu trong phát hiện ngã. Họ đã thêm nhiễu Gaussian vào tín hiệu cảm biến để tạo ra các mẫu mới, từ đó giúp mô hình học được các biến thể khác nhau của dữ liệu ngã.
-    
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}{Xử lý dữ liệu không cân bằng trong phát hiện ngã}
-
-\begin{itemize}
-   
-    \item Trong nghiên cứu của Khan et al. \cite{khan2017costsensitive}, các tác giả đã đề xuất phương pháp Class Weighting (Học có trọng số). Bằng cách gán trọng số cao hơn cho lớp thiểu số (ngã), mô hình trở nên ít bị thiên vị hơn và cải thiện khả năng phát hiện ngã.
-
-    \item Nghiên cứu của Roy et al. \cite{roy2020improvingfall} sử dụng mô hình Cost-sensitive Learning, trong đó chi phí gán sai cho lớp ngã được tăng lên. Điều này giúp mô hình chú trọng nhiều hơn đến việc phát hiện các tình huống ngã mà không làm giảm quá nhiều hiệu suất trên lớp đa số.
-    
-    \item Nghiên cứu gần đây của Lee et al. \cite{lee2023radarimbalanced} sử dụng cả SMOTE và tăng cường dữ liệu Mu-Sigma để cải thiện mô hình phát hiện ngã dựa trên tín hiệu radar. Kết quả cho thấy rằng sự kết hợp của các kỹ thuật này giúp tăng cường đáng kể độ chính xác và giảm tỷ lệ báo động sai trong hệ thống phát hiện ngã.
-\end{itemize}
-
-\end{frame}
-
-
-\begin{frame}{SMOTE (Synthetic Minority Over-sampling Technique)}
-    \begin{itemize}
-        \item SMOTE là phương pháp giúp giải quyết vấn đề mất cân bằng dữ liệu bằng cách tạo ra các mẫu tổng hợp cho lớp thiểu số.
-        \item Phương pháp này tạo ra các điểm dữ liệu mới bằng cách nội suy giữa các điểm dữ liệu thiểu số hiện có.
-        \item \textbf{Ví dụ}: Nếu lớp thiểu số có ít mẫu, SMOTE sẽ chọn một mẫu ngẫu nhiên từ lớp đó, tìm k lân cận gần nhất và tạo điểm mới trên đoạn thẳng nối các điểm này.
+    \begin{itemize}    
+    \item \textbf{Kỹ thuật cảm biến đeo}: Các thiết bị cảm biến đeo được kết nối IoT có khả năng truyền tải dữ liệu theo thời gian thực và gửi thông báo tới người thân hoặc dịch vụ y tế khi phát hiện ngã, đảm bảo sự trợ giúp nhanh chóng \footnote{M. M. Islam et al. (2022) \doi{10.1109/JIOT.2022.3228795}}.
     \end{itemize}
     \begin{figure}
         \centering
-        \includegraphics[width=.85\linewidth]{fig/smote imbalance.png}
-        \caption{Cách hoạt động của SMOTE}
+        \includegraphics[width=.55\linewidth]{fig/IoT-fall-detection.png}
+        \caption{Hệ thống phát hiện té ngã kết hợp IoT}
         \label{fig:lstm}
     \end{figure}
 \end{frame}
 
-\begin{frame}{Cách hoạt động của SMOTE}
+\begin{frame}{Phương Pháp Phát Hiện Ngã}
     \begin{itemize}
-        \item SMOTE chọn ngẫu nhiên một điểm dữ liệu thiểu số.
-        \item Tìm k lân cận gần nhất của điểm đó.
-        \item Tạo ra điểm dữ liệu mới nằm giữa điểm thiểu số đã chọn và lân cận.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Công thức tính toán}
-    \begin{equation}
-    \mathbf{x}_{new} = \mathbf{x}_i + \lambda \times (\mathbf{x}_i - \mathbf{x}_j)
-    \end{equation}
-    Trong đó:
-    \begin{itemize}
-        \item $\mathbf{x}_{new}$: Mẫu tổng hợp mới
-        \item $\mathbf{x}_i$: Điểm dữ liệu thiểu số ban đầu
-        \item $\mathbf{x}_j$: Điểm dữ liệu lân cận
-        \item $\lambda$: Hệ số ngẫu nhiên trong khoảng [0,1]
+    \item \textbf{Các phương pháp phát hiện ngã}: Các phương pháp phát hiện ngã dựa trên cảm biến đeo, phân loại thành ba nhóm chính: phương pháp dựa trên ngưỡng, phương pháp học máy truyền thống và phương pháp học sâu \footnote{M. M. Islam et al. (2022) \doi{10.1109/JIOT.2022.3228795}}.  
     \end{itemize}
     \begin{figure}
         \centering
-        \includegraphics[width=.65\linewidth]{fig/smote algorithm.png}
-        \caption{Công thức tính toán SMOTE}
-        \label{fig:lstm}
-    \end{figure}
-\end{frame}
-
-\begin{frame}{Ứng dụng của SMOTE}
-    \begin{itemize}
-        \item Phát hiện gian lận, té ngã, và các bài toán mất cân bằng khác.
-        \item SMOTE giúp cân bằng lại dữ liệu, cải thiện khả năng phân loại lớp thiểu số.
-        \item Kết hợp SMOTE với kỹ thuật undersampling lên lớp đa số để giảm số lượng mẫu lớp này sẽ cho kết quả tốt hơn.
-    \end{itemize}
-     \begin{figure}
-        \centering
-        \includegraphics[width=.5\linewidth]{fig/raw-smote.png}
-        \caption{Phương pháp SMOTE}
+        \includegraphics[width=.75\linewidth]{fig/fall-detection-method.png}
+        \caption{Phương pháp phát hiện té ngã}
         \label{fig:lstm}
     \end{figure}
 \end{frame}
 
 
-\begin{frame}{Class Weighting (Học có trọng số)}
+\section{Tổng quan}
+\begin{frame}{Hệ Thống Phát Hiện Ngã}
     \begin{itemize}
-        \item Class Weighting giúp mô hình chú trọng hơn đến lớp thiểu số bằng cách gán trọng số cao hơn cho các mẫu thuộc lớp này.
-        \item Điều này giúp giảm thiểu thiên vị đối với lớp đa số, đảm bảo rằng mô hình có thể phát hiện tốt các trường hợp thiểu số.
-        \item \textbf{Ví dụ}: Nếu lớp thiểu số có 5\% dữ liệu, trọng số cho lớp này sẽ cao hơn để cân bằng với lớp đa số, giúp cải thiện độ chính xác.
+    \item \textbf{Định nghĩa ngã theo WHO}: Ngã là sự rơi đột ngột xuống mặt đất hoặc bề mặt khác mà không có tác động từ bên ngoài. Phát hiện ngã là một trong những biện pháp quan trọng nhằm bảo vệ sức khỏe và tăng khả năng sống sót của người cao tuổi. Các hệ thống này giúp phát hiện và can thiệp kịp thời khi có sự cố xảy ra \footnote{M. Abd Elaziz et al. (2024) \doi{10.1016/j.bspc.2024.106412}}.
     \end{itemize}
+    
 \end{frame}
 
-\begin{frame}{Công thức tính trọng số lớp}
-    \begin{equation}
-    W_j = \frac{n\_samples}{n\_classes \times n\_samples_j}
-    \end{equation}
-    Trong đó:
+\begin{frame}{Hệ Thống Phát Hiện Ngã}
+
     \begin{itemize}
-        \item $W_j$: Trọng số cho lớp $j$
-        \item $n\_samples$: Tổng số mẫu trong tập dữ liệu
-        \item $n\_samples_j$: Số mẫu của lớp $j$
-        \item $n\_classes$: Tổng số lớp trong tập dữ liệu
+    \item \textbf{Vai trò của IoT}: Khi tích hợp với IoT, hệ thống phát hiện ngã có thể kết nối với các thiết bị khác trong môi trường thông minh như nhà ở hoặc bệnh viện. Điều này cho phép hệ thống thu thập dữ liệu thời gian thực và gửi thông báo ngay lập tức tới người thân hoặc dịch vụ y tế, đảm bảo hỗ trợ nhanh chóng \footnote{A. Dahou et al. (2024) \doi{10.1109/JIOT.2023.3286378}}.
     \end{itemize}
+    
 \end{frame}
 
-\begin{frame}{Ví dụ minh họa}
+\begin{frame}{Hệ Thống Phát Hiện Ngã}
     \begin{itemize}
-        \item Với $n\_samples = 10000$, lớp đa số có $9000$ mẫu và lớp thiểu số có $1000$ mẫu.
-        \item Trọng số cho lớp thiểu số:
-        \[
-        W_1 = \frac{10000}{2 \times 1000} = 5
-        \]
-        \item Trọng số cho lớp đa số:
-        \[
-        W_0 = \frac{10000}{2 \times 9000} = 0.555
-        \]
-    \end{itemize}
+    \item \textbf{Các công nghệ cảm biến}: Các cảm biến phổ biến như gia tốc kế, áp suất và radar giúp phát hiện nhanh chóng các tình huống ngã. Những cảm biến này giám sát chuyển động và vị trí cơ thể, phát hiện các thay đổi đột ngột và gửi cảnh báo ngay khi phát hiện ngã, từ đó giúp giảm thiểu thiệt hại do ngã gây ra \footnote{S. Campanella et al. (2024) \doi{10.1109/JSEN.2024.3375603}}.    
+    \end{itemize}    
 \end{frame}
 
-\begin{frame}{Phương pháp Mu-Sigma}
-    \begin{itemize}
-        \item Mu-Sigma là một kỹ thuật tăng cường dữ liệu giúp cải thiện số lượng mẫu cho lớp thiểu số bằng cách thêm nhiễu vào dữ liệu gốc.
-        \item Kỹ thuật này tạo ra hai mẫu mới bằng cách cộng và trừ nhiễu nhỏ từ tín hiệu ban đầu.
-        \item \textbf{Ví dụ}: Từ một chuỗi thời gian radar, Mu-Sigma tạo ra các mẫu tổng hợp tương tự tín hiệu gốc nhưng với sự khác biệt nhỏ do nhiễu.
-    \end{itemize}
-\end{frame}
+\begin{frame}{Hệ Thống Phát Hiện Ngã}
 
-\begin{frame}{Cách hoạt động của Mu-Sigma}
     \begin{itemize}
-        \item Tạo nhiễu nhỏ có cùng kích thước với tín hiệu ban đầu, với giá trị trung bình bằng 0 và độ lệch chuẩn bằng độ lệch chuẩn của tín hiệu.
-        \item Hai tín hiệu mới được tạo bằng cách cộng và trừ nhiễu từ tín hiệu ban đầu.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Công thức nhiễu Mu-Sigma}
-    \begin{equation}
-    Noise \sim N(0, \sigma^2)
-    \end{equation}
-    \begin{equation}
-    \sigma = \sqrt{\frac{\sum(x_i - \mu)^2}{N}}
-    \end{equation}
-    Trong đó:
-    \begin{itemize}
-        \item $N$: Số lượng mẫu
-        \item $\mu$: Trung bình của tín hiệu gốc
-        \item $\sigma$: Độ lệch chuẩn của tín hiệu
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Tạo mẫu tổng hợp}
-    \begin{equation}
-    X_{synthetic} = X \pm Noise
-    \end{equation}
-    \begin{itemize}
-        \item Tín hiệu tổng hợp được tạo bằng cách cộng và trừ nhiễu vào tín hiệu gốc.
-        \item Điều này tạo ra các mẫu mới giúp cải thiện sự đa dạng của dữ liệu huấn luyện.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Minh họa phương pháp Mu-Sigma}
-    \begin{itemize}
-        \item Hình 3 trong bài báo cho thấy cách Mu-Sigma được áp dụng lên dữ liệu chuỗi thời gian radar.
-        \item Các tín hiệu tổng hợp được tạo ra rất gần với tín hiệu ban đầu, giữ nguyên các đặc điểm quan trọng của tín hiệu gốc nhưng có thêm yếu tố nhiễu để tăng sự đa dạng.
-    \end{itemize}
+    \item \textbf{Phân loại hệ thống}: Hệ thống phát hiện ngã được chia thành ba loại chính: dựa trên cảm biến đeo, dựa trên camera, và dựa trên môi trường. Hệ thống cảm biến đeo được sử dụng rộng rãi nhờ tính linh hoạt và độ chính xác, trong khi các hệ thống dựa trên môi trường cung cấp giám sát liên tục mà không cần người dùng mang thiết bị \footnote{S. Wang et al. (2023) \doi{10.3390/s23146360}}.
     \begin{figure}
         \centering
-        \includegraphics[width=.5\linewidth]{fig/raw-ms.png}
-        \caption{Phương pháp Mu-Sigma}
+        \includegraphics[width=.75\linewidth]{fig/methodologies-fall-detection.png}
+        \caption{Các phương pháp triển khai}
         \label{fig:lstm}
     \end{figure}
-\end{frame}
-
-
-
-\begin{frame}{Tăng cường dữ liệu với Mu-Sigma}
-    \begin{itemize}
-    \item Tăng cường dữ liệu với Mu-Sigma là phương pháp thêm nhiễu Gaussian vào dữ liệu radar ban đầu để tạo ra các mẫu dữ liệu tổng hợp.
-    \item Điều này giúp tăng số lượng mẫu cho lớp thiểu số (ngã) và tạo ra nhiều biến thể khác nhau từ tín hiệu ban đầu, từ đó cải thiện khả năng học của mô hình.
-    \item \textbf{Ví dụ}: Bằng cách thêm nhiễu Gaussian vào các mẫu dữ liệu ngã hiện có, mô hình có thể học từ các tín hiệu đã được biến đổi, giúp phát hiện ngã chính xác hơn trong các tình huống khác nhau.
     \end{itemize}
 \end{frame}
-
-
-\begin{thebibliography}{99}
-
-\bibitem{zhang2015imbalanced}
-Zhang, Z., Wei, X., "Handling Imbalanced Data with SMOTE in Fall Detection Systems," \emph{IEEE Transactions on Biomedical Engineering}, 2015.
-
-\bibitem{wang2019dataaugmentation}
-Wang, Y., Chen, L., "Data Augmentation for Fall Detection Using Noisy Sensor Data," \emph{Sensors}, 2019.
-
-\bibitem{khan2017costsensitive}
-Khan, S., Madden, M., "Cost-Sensitive Learning to Improve Fall Detection with Imbalanced Data," \emph{Journal of Machine Learning Research}, 2017.
-
-\bibitem{roy2020improvingfall}
-Roy, P., Ahmed, Z., "Improving Fall Detection Accuracy with Cost-sensitive Learning," \emph{Pattern Recognition Letters}, 2020.
-
-\bibitem{lee2023radarimbalanced}
-Lee, J., Park, S., "Radar-based Fall Detection with Imbalanced Data Handling and Data Augmentation," \emph{IEEE Access}, 2023.
-
-\end{thebibliography}
 
 
 \begin{frame}{}
   \centering \Huge
   \textbf{Thank You for Your Listening}
+\end{frame}
+
+\section{Tài liệu tham khảo}
+
+\begin{frame}{Reference}
+\scriptsize
+    \begin{itemize}
+        \item [1] M. N. Bhuiyan, M. M. Rahman, M. M. Billah, and D. Saha, “Internet of things (iot): A review of its enabling technologies in healthcare applications, standards protocols, security, and market opportunities,” IEEE Internet of Things Journal, vol. 8, no. 13, pp. 10 474–10 498, 2021.    
+        \item [2] M. M. Islam, S. Nooruddin, F. Karray, and G. Muhammad, “Internet of things: Device capabilities, architectures, protocols, and smart applica-tions in healthcare domain,” IEEE Internet of Things Journal,vol. 10, no. 4, pp. 3611–3641, 2022.
+        \item [3] S. Nooruddin, M. M. Islam, F. A. Sharna, H. Alhetari, and M. N. Kabir, “Sensor-based fall detection systems: a review,” Journal of Ambient Intelligence and Humanized Computing,pp. 1–17, 2022.
+        \item [4] M. A. Al-qaness, A. Dahou, M. Abd Elaziz, and A. M. Helmi, “Human activity recognition and fall detection using convolutional neural network and transformer-based architecture,” Biomedical Signal Processing and Control,vol. 95, p. 106412, 2024.
+        \item [5] A. Dahou, M. A. Al-Qaness, M. Abd Elaziz, and A. M. Helmi, “Mlcnnwav: Multi-level convolutional neural network with wavelet transformations for sensor-based human activity recognition,” IEEE Internet of Things Journal,vol. 11, no. 1, pp. 820–828, 2024.
+        \item [6] S. Campanella, A. Alnasef, L. Falaschetti, A. Belli, P. Pierleoni, and L. Palma, “A novel embedded deep learning wearable sensor for fall detection,” IEEE Sensors Journal,2024.       
+    \end{itemize}
 \end{frame}
 
 
