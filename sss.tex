@@ -1,0 +1,282 @@
+\documentclass{beamer}
+\usetheme{Madrid}
+\AtBeginSection[]{
+  \begin{frame}
+  \vfill
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+    \usebeamerfont{title}\insertsectionhead\par%
+  \end{beamercolorbox}
+  \vfill
+  \end{frame}
+}
+
+\usepackage[utf8]{vietnam}
+\newcommand*{\doi}[1]{\href{http://dx.doi.org/#1}{doi: #1}}
+\addtocontents{toc}{\setcounter{tocdepth}{2}} 
+\usepackage{hyperref}
+\usepackage{multirow}
+\usecolortheme{default}
+\setbeamertemplate{caption}[numbered]
+\usepackage{subcaption}
+\captionsetup{compatibility=false}
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+\title[Fall Detection System]
+{Kết hợp các kỹ thuật xử lý dữ liệu không cân bằng và học sâu để nâng cao độ chính xác trong phát hiện té ngã}
+
+\subtitle{Combining Imbalanced Data Handling Techniques and Deep Learning to Enhance Accuracy in Fall Detection}
+
+
+\author[Nguyen Dinh Anh] % (optional, for multiple authors)
+{Nguyễn Đình Ánh}
+
+\institute[HUTECH] % (optional)
+{
+  %
+  Bộ môn Công nghệ phần mềm \\
+  Khoa Công nghệ Thông tin\\
+  Đại học Công nghệ TP. Hồ Chí Minh (HUTECH)
+}
+
+\date[HUTECH 2024] % (optional)
+{\today}
+
+\logo{\includegraphics[height=1cm]{logo_HUTECH.png}}
+
+\definecolor{uoftblue}{RGB}{6,41,88}
+\setbeamercolor{titlelike}{bg=uoftblue}
+\setbeamerfont{title}{series=\bfseries}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}
+\frametitle{Nội dung trình bày}
+\tableofcontents
+\end{frame}
+
+
+\section{Xử lý dữ liệu không cân bằng}
+
+\begin{frame}{Vấn đề dữ liệu không cân bằng}
+    \begin{itemize}
+    \item Trong bài toán phát hiện ngã, dữ liệu thường bị mất cân bằng nghiêm trọng, với số lượng lớn mẫu dữ liệu thuộc về các hoạt động hàng ngày (ADL) và rất ít mẫu thuộc về các sự kiện ngã.
+    \item Điều này gây khó khăn cho các mô hình học máy, vì mô hình có xu hướng ưu tiên dự đoán các hoạt động thường ngày hơn là phát hiện ngã.
+    \item \textbf{Ví dụ}: Nếu có 10,000 mẫu dữ liệu về hoạt động hàng ngày nhưng chỉ có 500 mẫu dữ liệu về ngã, mô hình có thể bỏ sót nhiều trường hợp ngã do thiếu dữ liệu cho lớp thiểu số.
+    \end{itemize}
+\end{frame}
+
+\section{Nghiên cứu liên quan về Xử lý dữ liệu không cân bằng}
+
+\begin{frame}{Xử lý dữ liệu không cân bằng trong phát hiện ngã}
+
+Một số nghiên cứu quan trọng liên quan đến việc giải quyết vấn đề này:
+
+\begin{itemize}
+    \item Trong nghiên cứu của Zhang et al. \cite{zhang2015imbalanced}, các tác giả đã áp dụng kỹ thuật SMOTE (Synthetic Minority Over-sampling Technique) để tạo ra các mẫu tổng hợp từ lớp thiểu số. SMOTE đã được chứng minh là cải thiện hiệu suất của mô hình bằng cách cân bằng dữ liệu giữa lớp ngã và ADL.
+    
+    \item Wang et al. \cite{wang2019dataaugmentation} đã sử dụng các kỹ thuật tăng cường dữ liệu (Data Augmentation) để giải quyết mất cân bằng dữ liệu trong phát hiện ngã. Họ đã thêm nhiễu Gaussian vào tín hiệu cảm biến để tạo ra các mẫu mới, từ đó giúp mô hình học được các biến thể khác nhau của dữ liệu ngã.
+    
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Xử lý dữ liệu không cân bằng trong phát hiện ngã}
+
+\begin{itemize}
+   
+    \item Trong nghiên cứu của Khan et al. \cite{khan2017costsensitive}, các tác giả đã đề xuất phương pháp Class Weighting (Học có trọng số). Bằng cách gán trọng số cao hơn cho lớp thiểu số (ngã), mô hình trở nên ít bị thiên vị hơn và cải thiện khả năng phát hiện ngã.
+
+    \item Nghiên cứu của Roy et al. \cite{roy2020improvingfall} sử dụng mô hình Cost-sensitive Learning, trong đó chi phí gán sai cho lớp ngã được tăng lên. Điều này giúp mô hình chú trọng nhiều hơn đến việc phát hiện các tình huống ngã mà không làm giảm quá nhiều hiệu suất trên lớp đa số.
+    
+    \item Nghiên cứu gần đây của Lee et al. \cite{lee2023radarimbalanced} sử dụng cả SMOTE và tăng cường dữ liệu Mu-Sigma để cải thiện mô hình phát hiện ngã dựa trên tín hiệu radar. Kết quả cho thấy rằng sự kết hợp của các kỹ thuật này giúp tăng cường đáng kể độ chính xác và giảm tỷ lệ báo động sai trong hệ thống phát hiện ngã.
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{SMOTE (Synthetic Minority Over-sampling Technique)}
+    \begin{itemize}
+        \item SMOTE là phương pháp giúp giải quyết vấn đề mất cân bằng dữ liệu bằng cách tạo ra các mẫu tổng hợp cho lớp thiểu số.
+        \item Phương pháp này tạo ra các điểm dữ liệu mới bằng cách nội suy giữa các điểm dữ liệu thiểu số hiện có.
+        \item \textbf{Ví dụ}: Nếu lớp thiểu số có ít mẫu, SMOTE sẽ chọn một mẫu ngẫu nhiên từ lớp đó, tìm k lân cận gần nhất và tạo điểm mới trên đoạn thẳng nối các điểm này.
+    \end{itemize}
+    \begin{figure}
+        \centering
+        \includegraphics[width=.85\linewidth]{fig/smote imbalance.png}
+        \caption{Cách hoạt động của SMOTE}
+        \label{fig:lstm}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Cách hoạt động của SMOTE}
+    \begin{itemize}
+        \item SMOTE chọn ngẫu nhiên một điểm dữ liệu thiểu số.
+        \item Tìm k lân cận gần nhất của điểm đó.
+        \item Tạo ra điểm dữ liệu mới nằm giữa điểm thiểu số đã chọn và lân cận.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Công thức tính toán}
+    \begin{equation}
+    \mathbf{x}_{new} = \mathbf{x}_i + \lambda \times (\mathbf{x}_i - \mathbf{x}_j)
+    \end{equation}
+    Trong đó:
+    \begin{itemize}
+        \item $\mathbf{x}_{new}$: Mẫu tổng hợp mới
+        \item $\mathbf{x}_i$: Điểm dữ liệu thiểu số ban đầu
+        \item $\mathbf{x}_j$: Điểm dữ liệu lân cận
+        \item $\lambda$: Hệ số ngẫu nhiên trong khoảng [0,1]
+    \end{itemize}
+    \begin{figure}
+        \centering
+        \includegraphics[width=.65\linewidth]{fig/smote algorithm.png}
+        \caption{Công thức tính toán SMOTE}
+        \label{fig:lstm}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Ứng dụng của SMOTE}
+    \begin{itemize}
+        \item Phát hiện gian lận, té ngã, và các bài toán mất cân bằng khác.
+        \item SMOTE giúp cân bằng lại dữ liệu, cải thiện khả năng phân loại lớp thiểu số.
+        \item Kết hợp SMOTE với kỹ thuật undersampling lên lớp đa số để giảm số lượng mẫu lớp này sẽ cho kết quả tốt hơn.
+    \end{itemize}
+     \begin{figure}
+        \centering
+        \includegraphics[width=.5\linewidth]{fig/raw-smote.png}
+        \caption{Phương pháp SMOTE}
+        \label{fig:lstm}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}{Class Weighting (Học có trọng số)}
+    \begin{itemize}
+        \item Class Weighting giúp mô hình chú trọng hơn đến lớp thiểu số bằng cách gán trọng số cao hơn cho các mẫu thuộc lớp này.
+        \item Điều này giúp giảm thiểu thiên vị đối với lớp đa số, đảm bảo rằng mô hình có thể phát hiện tốt các trường hợp thiểu số.
+        \item \textbf{Ví dụ}: Nếu lớp thiểu số có 5\% dữ liệu, trọng số cho lớp này sẽ cao hơn để cân bằng với lớp đa số, giúp cải thiện độ chính xác.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Công thức tính trọng số lớp}
+    \begin{equation}
+    W_j = \frac{n\_samples}{n\_classes \times n\_samples_j}
+    \end{equation}
+    Trong đó:
+    \begin{itemize}
+        \item $W_j$: Trọng số cho lớp $j$
+        \item $n\_samples$: Tổng số mẫu trong tập dữ liệu
+        \item $n\_samples_j$: Số mẫu của lớp $j$
+        \item $n\_classes$: Tổng số lớp trong tập dữ liệu
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Ví dụ minh họa}
+    \begin{itemize}
+        \item Với $n\_samples = 10000$, lớp đa số có $9000$ mẫu và lớp thiểu số có $1000$ mẫu.
+        \item Trọng số cho lớp thiểu số:
+        \[
+        W_1 = \frac{10000}{2 \times 1000} = 5
+        \]
+        \item Trọng số cho lớp đa số:
+        \[
+        W_0 = \frac{10000}{2 \times 9000} = 0.555
+        \]
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Phương pháp Mu-Sigma}
+    \begin{itemize}
+        \item Mu-Sigma là một kỹ thuật tăng cường dữ liệu giúp cải thiện số lượng mẫu cho lớp thiểu số bằng cách thêm nhiễu vào dữ liệu gốc.
+        \item Kỹ thuật này tạo ra hai mẫu mới bằng cách cộng và trừ nhiễu nhỏ từ tín hiệu ban đầu.
+        \item \textbf{Ví dụ}: Từ một chuỗi thời gian radar, Mu-Sigma tạo ra các mẫu tổng hợp tương tự tín hiệu gốc nhưng với sự khác biệt nhỏ do nhiễu.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Cách hoạt động của Mu-Sigma}
+    \begin{itemize}
+        \item Tạo nhiễu nhỏ có cùng kích thước với tín hiệu ban đầu, với giá trị trung bình bằng 0 và độ lệch chuẩn bằng độ lệch chuẩn của tín hiệu.
+        \item Hai tín hiệu mới được tạo bằng cách cộng và trừ nhiễu từ tín hiệu ban đầu.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Công thức nhiễu Mu-Sigma}
+    \begin{equation}
+    Noise \sim N(0, \sigma^2)
+    \end{equation}
+    \begin{equation}
+    \sigma = \sqrt{\frac{\sum(x_i - \mu)^2}{N}}
+    \end{equation}
+    Trong đó:
+    \begin{itemize}
+        \item $N$: Số lượng mẫu
+        \item $\mu$: Trung bình của tín hiệu gốc
+        \item $\sigma$: Độ lệch chuẩn của tín hiệu
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Tạo mẫu tổng hợp}
+    \begin{equation}
+    X_{synthetic} = X \pm Noise
+    \end{equation}
+    \begin{itemize}
+        \item Tín hiệu tổng hợp được tạo bằng cách cộng và trừ nhiễu vào tín hiệu gốc.
+        \item Điều này tạo ra các mẫu mới giúp cải thiện sự đa dạng của dữ liệu huấn luyện.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Minh họa phương pháp Mu-Sigma}
+    \begin{itemize}
+        \item Hình 3 trong bài báo cho thấy cách Mu-Sigma được áp dụng lên dữ liệu chuỗi thời gian radar.
+        \item Các tín hiệu tổng hợp được tạo ra rất gần với tín hiệu ban đầu, giữ nguyên các đặc điểm quan trọng của tín hiệu gốc nhưng có thêm yếu tố nhiễu để tăng sự đa dạng.
+    \end{itemize}
+    \begin{figure}
+        \centering
+        \includegraphics[width=.5\linewidth]{fig/raw-ms.png}
+        \caption{Phương pháp Mu-Sigma}
+        \label{fig:lstm}
+    \end{figure}
+\end{frame}
+
+
+
+\begin{frame}{Tăng cường dữ liệu với Mu-Sigma}
+    \begin{itemize}
+    \item Tăng cường dữ liệu với Mu-Sigma là phương pháp thêm nhiễu Gaussian vào dữ liệu radar ban đầu để tạo ra các mẫu dữ liệu tổng hợp.
+    \item Điều này giúp tăng số lượng mẫu cho lớp thiểu số (ngã) và tạo ra nhiều biến thể khác nhau từ tín hiệu ban đầu, từ đó cải thiện khả năng học của mô hình.
+    \item \textbf{Ví dụ}: Bằng cách thêm nhiễu Gaussian vào các mẫu dữ liệu ngã hiện có, mô hình có thể học từ các tín hiệu đã được biến đổi, giúp phát hiện ngã chính xác hơn trong các tình huống khác nhau.
+    \end{itemize}
+\end{frame}
+
+
+\begin{thebibliography}{99}
+
+\bibitem{zhang2015imbalanced}
+Zhang, Z., Wei, X., "Handling Imbalanced Data with SMOTE in Fall Detection Systems," \emph{IEEE Transactions on Biomedical Engineering}, 2015.
+
+\bibitem{wang2019dataaugmentation}
+Wang, Y., Chen, L., "Data Augmentation for Fall Detection Using Noisy Sensor Data," \emph{Sensors}, 2019.
+
+\bibitem{khan2017costsensitive}
+Khan, S., Madden, M., "Cost-Sensitive Learning to Improve Fall Detection with Imbalanced Data," \emph{Journal of Machine Learning Research}, 2017.
+
+\bibitem{roy2020improvingfall}
+Roy, P., Ahmed, Z., "Improving Fall Detection Accuracy with Cost-sensitive Learning," \emph{Pattern Recognition Letters}, 2020.
+
+\bibitem{lee2023radarimbalanced}
+Lee, J., Park, S., "Radar-based Fall Detection with Imbalanced Data Handling and Data Augmentation," \emph{IEEE Access}, 2023.
+
+\end{thebibliography}
+
+
+\begin{frame}{}
+  \centering \Huge
+  \textbf{Thank You for Your Listening}
+\end{frame}
+
+
+\end{document}
